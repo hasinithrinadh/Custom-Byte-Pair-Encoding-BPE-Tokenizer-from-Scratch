@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "kernelspec": {
+      "name": "python",
+      "display_name": "Python (Pyodide)",
+      "language": "python"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "python",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.8"
+    }
+  },
+  "nbformat_minor": 5,
+  "nbformat": 4,
+  "cells": [
+    {
+      "id": "92f8389b-6af7-4778-9ee4-d89ae633f641",
+      "cell_type": "code",
+      "source": "import numpy as np\nwords = np.array([\"low\", \"lower\", \"lowest\", \"newest\"])\nvocab = []\nfor word in words:\n    chars = list(word)\n    chars.append(\"</w>\")\n    vocab.append(chars)\n\nprint(\"Initial Vocabulary\")\nfor word in vocab:\n    print(word)\npair_freq = {}\nfor word in vocab:\n    for i in range(len(word) - 1):\n        pair = (word[i], word[i + 1])\n\n        if pair in pair_freq:\n            pair_freq[pair] += 1\n        else:\n            pair_freq[pair] = 1\nprint(\"\\nPair Frequencies\")\nfor pair, count in pair_freq.items():\n    print(pair, \":\", count)\nbest_pair = max(pair_freq, key=pair_freq.get)\nprint(\"\\nMost Frequent Pair:\", best_pair)\nnew_vocab = []\nfor word in vocab:\n    merged = []\n    i = 0\n    while i < len(word):\n        if (\n            i < len(word) - 1\n            and word[i] == best_pair[0]\n            and word[i + 1] == best_pair[1]\n        ):\n            merged.append(word[i] + word[i + 1])\n            i += 2\n        else:\n            merged.append(word[i])\n            i += 1\n\n    new_vocab.append(merged)\n\nprint(\"\\nVocabulary After Merge\")\nfor word in new_vocab:\n    print(word)",
+      "metadata": {
+        "trusted": true
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": "Initial Vocabulary\n['l', 'o', 'w', '</w>']\n['l', 'o', 'w', 'e', 'r', '</w>']\n['l', 'o', 'w', 'e', 's', 't', '</w>']\n['n', 'e', 'w', 'e', 's', 't', '</w>']\n\nPair Frequencies\n('l', 'o') : 3\n('o', 'w') : 3\n('w', '</w>') : 1\n('w', 'e') : 3\n('e', 'r') : 1\n('r', '</w>') : 1\n('e', 's') : 2\n('s', 't') : 2\n('t', '</w>') : 2\n('n', 'e') : 1\n('e', 'w') : 1\n\nMost Frequent Pair: ('l', 'o')\n\nVocabulary After Merge\n['lo', 'w', '</w>']\n['lo', 'w', 'e', 'r', '</w>']\n['lo', 'w', 'e', 's', 't', '</w>']\n['n', 'e', 'w', 'e', 's', 't', '</w>']\n"
+        }
+      ],
+      "execution_count": 1
+    },
+    {
+      "id": "61627f6c-7f71-4684-a81b-2fbd36f1bdb0",
+      "cell_type": "code",
+      "source": "",
+      "metadata": {
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    }
+  ]
+}
